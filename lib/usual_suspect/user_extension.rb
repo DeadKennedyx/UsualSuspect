@@ -3,7 +3,7 @@ module UsualSuspect
     extend ActiveSupport::Concern
 
     included do
-      after_update :check_for_suspicious_password_change, if: :saved_change_to_encrypted_password?
+      after_update :check_for_suspicious_password_change, if: :saved_change_to_password?
     end
 
     def update_login_times

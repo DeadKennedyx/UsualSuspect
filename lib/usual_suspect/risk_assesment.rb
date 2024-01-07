@@ -18,6 +18,7 @@ module UsualSuspect
       # Return a numeric value representing the risk level
       # Placeholder logic for now
       # @user.encrypted_password_changed_recently? ? 10 : 0
+      10
     end
   end
 end
