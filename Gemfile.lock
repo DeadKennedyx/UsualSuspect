@@ -25,6 +25,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-18
+  x86_64-linux
 
 DEPENDENCIES
   geocoder (~> 1.8.2)
