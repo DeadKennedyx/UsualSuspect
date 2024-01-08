@@ -1,0 +1,15 @@
+class CreateUsualSuspectEvents < ActiveRecord::Migration[6.0]
+  def change
+    create_table :usual_suspect_events do |t|
+      t.references :user, foreign_key: true
+      t.datetime :last_sign_in_at
+      t.datetime :sign_in_at
+      t.boolean :password_change_after_login
+      t.boolean :geovelocity_failed
+      t.boolean :vpn_usage
+      t.string :ip_location
+
+      t.timestamps
+    end
+  end
+end

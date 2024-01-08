@@ -7,16 +7,20 @@ module UsualSuspect
     end
 
     def update_login_times
-      self.last_sign_in_at = self.sign_in_at || Time.current
-      self.sign_in_at = Time.current
-      save
+      event = UsualSuspectEvent.find_or_initialize_by(user: self)
+      event.last_sign_in_at = event.sign_in_at
+      event.sign_in_at = Time.current
+      event.save
     end
 
     private
 
     def check_for_suspicious_password_change
-      if self.last_sign_in_at && Time.current - self.last_sign_in_at < suspicious_threshold
+      event = UsualSuspectEvent.find_by(user: self)
+      
+      if event && event.sign_in_at && Time.current - event.sign_in_at < suspicious_threshold
         log_suspicious_activity('Password changed shortly after login')
+        event.update(password_change_after_login: true)
       end
     end
 
