@@ -2,4 +2,6 @@ class UsualSuspectEvent < ApplicationRecord
   include UsualSuspect::Event
 
   belongs_to :user
+
+  validates :session_token, presence: true
 end

@@ -2,21 +2,34 @@ module UsualSuspect
   module UserExtension
     extend ActiveSupport::Concern
 
-    included do
-      after_update :check_for_suspicious_password_change, if: :saved_change_to_password?
-    end
+    def update_login(ip, location, session_token)
+      event = UsualSuspectEvent.new(user: self, session_token: session_token)
 
-    def update_login_times
-      event = UsualSuspectEvent.find_or_initialize_by(user: self)
-      event.last_sign_in_at = event.sign_in_at
-      event.sign_in_at = Time.current
+      event.assign_attributes(
+        sign_in_at: Time.current,
+        sign_in_ip: ip,
+        city: location.city,
+        country: location.country,
+        latitude: location.latitude,
+        longitude: location.longitude
+      )
+      
       event.save
+
+      check_geo_velocity(event)
     end
 
-    private
 
-    def check_for_suspicious_password_change
-      event = UsualSuspectEvent.find_by(user: self)
+    def check_geo_velocity(current_event)
+      last_event = UsualSuspectEvent.where(user: self).order(:sign_in_at).second_to_last
+
+      if last_event && geo_velocity_failed?(last_event, current_event)
+        current_event.update(geovelocity_failed: true)
+      end
+    end
+
+    def check_for_suspicious_password_change(session_token)
+      event = UsualSuspectEvent.find_by(user: self, session_token: session_token)
       
       if event && event.sign_in_at && Time.current - event.sign_in_at < suspicious_threshold
         log_suspicious_activity('Password changed shortly after login')
@@ -24,13 +37,28 @@ module UsualSuspect
       end
     end
 
+    private
+
+    def geo_velocity_failed?(last_event, current_event)
+      distance = Geocoder::Calculations.distance_between(
+        [last_event.latitude, last_event.longitude],
+        [current_event.latitude, current_event.longitude]
+      )
+
+      time_difference_hours = (current_event.sign_in_at - last_event.sign_in_at) / 1.hour
+
+      velocity = distance / time_difference_hours
+
+      max_feasible_velocity = 926
+
+      velocity > max_feasible_velocity
+    end
+
     def suspicious_threshold
-      1.minutes
+      5.minutes
     end
 
     def log_suspicious_activity(activity)
-      # Implement logging mechanism
-      # This could be a simple log, an entry in a database table, or an alert
       Rails.logger.warn("[UsualSuspect] Activity: #{activity}")
     end
   end
