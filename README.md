@@ -57,12 +57,13 @@ And when your session is created and you have a current_user available then add 
 track_usual_suspect_login
 ```
 
-To check for suspicious password change after login you can add this in your password update controller method:
+To check for suspicious password change after login you can add this in your password or wherever the user password gets updated:
 ```	
 current_user.check_for_suspicious_password_change(session[:usual_suspect_session_token])
 ```
 
 When the user logs in, it will create a new record in the table `UsualSuspectEvent`, and depending on the fields you can decide if you should block that user account, depending on your organization requirements.
+Also when the user changes password it will update the `password_change_after_login` to true if the password change was before 5 minutes of being logged in.
 
 ```ruby
 [#<UsualSuspectEvent:0x00007fcdd8319680
