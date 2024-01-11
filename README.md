@@ -86,6 +86,7 @@ Also when the user changes password it will update the `password_change_after_lo
   updated_at: Thu, 11 Jan 2024 00:56:59.232648000 UTC +00:00>]
 ```
 
+The free tier on [vpnapi.io](https://vpnapi.io/api-documentation) allows for 1k requests per day, you'll need to upgrade tier if you want more, if you want to make this gem to be available to use in more services feel free to open a pull request and I'll add it!
 ## Contributing
 
 Contributions are more than welcome! If you have ideas for improvements or encounter any issues, please feel free to fork the repository and submit a pull request or an issue and I'll find the time to fix it.
@@ -96,7 +97,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Acknowledgements
 
-- [vpnapi.io](https://vpnapi.io/api-documentation):
+- [vpnapi.io](https://vpnapi.io/api-documentation)
 - [Geocoder](https://github.com/alexreisner/geocoder)
 
 Elevate your Rails application's security to the next level with UsualSuspect!
