@@ -1,6 +1,6 @@
 # UsualSuspect: Your Rails Guardian Against Suspicious Logins and Behaviour
 
-**UsualSuspect** is a cutting-edge Ruby gem specifically tailored for Rails applications, designed to fortify your user authentication system against an array of security threats. With a focus on real-time analysis and monitoring of user logins, UsualSuspect acts as a vigilant guard, identifying to unusual and potentially harmful activities, the response is up to you!
+**UsualSuspect** is a cutting-edge Ruby gem specifically tailored for Rails applications, designed to fortify your user authentication system against an array of security threats. With a focus on real-time analysis and monitoring of user logins, UsualSuspect acts as a vigilant guard, identifying unusual and potentially harmful activities, the response is up to you!
 
 ## Key Features
 
