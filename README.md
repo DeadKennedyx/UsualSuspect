@@ -57,7 +57,7 @@ And when your session is created and you have a current_user available then add 
 track_usual_suspect_login
 ```
 
-To check for suspicious password change after login you can add this in the controller and method the user password is updated:
+To check for suspicious password change after login you can add this in the controller and method where the user password is updated:
 ```	
 current_user.check_for_suspicious_password_change(session[:usual_suspect_session_token])
 ```
