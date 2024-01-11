@@ -1,10 +1,10 @@
 # lib/usual_suspect/configuration.rb
 module UsualSuspect
   class Configuration
-    attr_accessor :block_criteria
+    attr_accessor :vpn_api_key
 
     def initialize
-      @block_criteria = []
+      @vpn_api_key = nil
     end
   end
 

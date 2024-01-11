@@ -4,6 +4,7 @@ module UsualSuspect
 
     def update_login(ip, location, session_token)
       event = UsualSuspectEvent.new(user: self, session_token: session_token)
+      vpn_tor_proxy_usage = UsualSuspect::VpnChecker.check_vpn(ip)
 
       event.assign_attributes(
         sign_in_at: Time.current,
@@ -11,7 +12,10 @@ module UsualSuspect
         city: location.city,
         country: location.country,
         latitude: location.latitude,
-        longitude: location.longitude
+        longitude: location.longitude,
+        using_vpn: vpn_tor_proxy_usage['security']['vpn'],
+        using_proxy: vpn_tor_proxy_usage['security']['proxy'],
+        using_tor: vpn_tor_proxy_usage['security']['tor'],
       )
       
       event.save

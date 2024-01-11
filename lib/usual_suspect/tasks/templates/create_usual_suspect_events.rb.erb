@@ -6,7 +6,9 @@ class CreateUsualSuspectEvents < ActiveRecord::Migration[6.0]
       t.datetime :sign_in_at
       t.boolean :password_change_after_login
       t.boolean :geovelocity_failed
-      t.boolean :vpn_usage
+      t.boolean :using_vpn
+      t.boolean :using_proxy
+      t.boolean :using_tor
       t.string :sign_in_ip
       t.string :city
       t.string :country
