@@ -5,7 +5,7 @@
 ## Key Features
 
 - **Password Change Monitoring**: Detects and logs suspicious password changes immediately after user login, providing an early warning system against account hijacking.
-- **Geo-Velocity Tracking**: Utilizes advanced algorithms to calculate the speed of user movement based on login locations, flagging physically impossible travel scenarios that may indicate account compromises or account multi sharing.
+- **Geo-Velocity Tracking**: Utilizes algorithms to calculate the speed of user movement based on login locations, flagging physically impossible travel scenarios that may indicate account compromises or account multi sharing.
 - **VPN, Proxy and Tor Detection**: Leverages [vpnapi.io](https://vpnapi.io/api-documentation) robust database to identify logins from VPNs and proxies, enhancing your defense against masked IP addresses and location spoofing.
 - **Session-Specific Analysis**: Each login session is treated uniquely, ensuring precise and context-aware security checks.
 - **Configurable and Extendable**: Tailor the gem's behavior to your application's specific needs with customizable settings and thresholds.
