@@ -97,7 +97,7 @@ for (var key in deviceInfo) {
     createAndAppendInput(key, deviceInfo[key]);
 }
 ```
-
+#### Data saved:
 When the user logs in, it will create a new record in the table `UsualSuspectEvent`, and depending on the fields you can decide if you should block that user account.
 Also when the user changes password it will update the `password_change_after_login` to true if the password change was before 5 minutes of being logged in.
 
