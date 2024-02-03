@@ -69,6 +69,9 @@ current_user.check_for_suspicious_password_change(session[:usual_suspect_session
 To add device fingerprinting you will need to send device_info parameters in your login form. you can get device_info this way with javascript, usual_suspect will take care of the rest.
 
 ```javascript
+var formId = 'your_login_form_id'; // Replace with your actual form ID
+var form = document.getElementById(formId);
+
 var deviceInfo = {
     language: navigator.language,
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -81,6 +84,18 @@ var deviceInfo = {
     deviceMemory: navigator.deviceMemory || 'unknown',
     hardwareConcurrency: navigator.hardwareConcurrency,
 };
+
+function createAndAppendInput(name, value) {
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'device_info[' + name + ']';
+    input.value = value;
+    form.append(input);
+}
+
+for (var key in deviceInfo) {
+    createAndAppendInput(key, deviceInfo[key]);
+}
 ```
 
 When the user logs in, it will create a new record in the table `UsualSuspectEvent`, and depending on the fields you can decide if you should block that user account.
