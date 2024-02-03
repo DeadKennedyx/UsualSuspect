@@ -4,7 +4,7 @@ require_relative "lib/usual_suspect/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "usual_suspect"
-  spec.version       = UsualSuspect::VERSION
+  spec.version       = "1.0.0"
   spec.authors       = ["DeadKennedyx"]
   spec.email         = ["juan.dw.ft@gmail.com"]
 
