@@ -68,6 +68,8 @@ current_user.check_for_suspicious_password_change(session[:usual_suspect_session
 #### Device fingerprinting:
 To add device fingerprinting you will need to send device_info parameters in your login form. you can get device_info this way with javascript, usual_suspect will take care of the rest.
 
+This will save the device fingerprint as a sha256 digest `device_fingerprint: "c18ab96a22bece029c71a7229b48234786b3055880eeda6091942ef5cd136"` and if a new device logs with a different fingerprint it will save the `new_device` column as true.
+
 ```javascript
 var formId = 'your_login_form_id'; // Replace with your actual form ID
 var form = document.getElementById(formId);
