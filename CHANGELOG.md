@@ -6,8 +6,12 @@ All notable changes to the `UsualSuspect` gem will be documented in this file.
 
 - Additional security features and enhancements.
 
-## [0.1.0] - 2024-01-10
+## [1.0.0] - 2024-02-03
+### Added
+- Device Fingerprinting
+- New Device tracking
 
+## [0.1.0] - 2024-01-08
 ### Added
 
 - **Suspicious Password Change Detection**: Automatically monitors and logs instances where a password is changed shortly after logging in, helping to identify potential account hijacking.

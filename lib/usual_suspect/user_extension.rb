@@ -2,9 +2,12 @@ module UsualSuspect
   module UserExtension
     extend ActiveSupport::Concern
 
-    def update_login(ip, location, session_token)
+    def update_login(ip, location, session_token, device_info)
       event = UsualSuspectEvent.new(user: self, session_token: session_token)
       vpn_tor_proxy_usage = UsualSuspect::VpnChecker.check_vpn(ip)
+
+      fingerprint_string = device_info.values.join('|')
+      current_fingerprint = Digest::SHA256.hexdigest(fingerprint_string)
 
       event.assign_attributes(
         sign_in_at: Time.current,
@@ -16,13 +19,15 @@ module UsualSuspect
         using_vpn: vpn_tor_proxy_usage['security']['vpn'],
         using_proxy: vpn_tor_proxy_usage['security']['proxy'],
         using_tor: vpn_tor_proxy_usage['security']['tor'],
+        device_fingerprint: current_fingerprint,
+        new_device: usual_suspect_events.none? { |event| event.device_fingerprint == current_fingerprint }
       )
+
       
       event.save
 
       check_geo_velocity(event)
     end
-
 
     def check_geo_velocity(current_event)
       last_event = UsualSuspectEvent.where(user: self).order(:sign_in_at).second_to_last
