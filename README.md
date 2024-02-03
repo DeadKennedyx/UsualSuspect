@@ -6,6 +6,8 @@
 
 - **Password Change Monitoring**: Detects and logs suspicious password changes immediately after user login, providing an early warning system against account hijacking.
 - **Geo-Velocity Tracking**: Utilizes algorithms to calculate the speed of user movement based on login locations, flagging physically impossible travel scenarios that may indicate account compromises or account multi sharing.
+- **Device Fingerprinting**: Device fingerprinting support.
+- **New Device Detection**: check saved fingerprints to detect new devices.
 - **VPN, Proxy and Tor Detection**: Leverages [vpnapi.io](https://vpnapi.io/api-documentation) robust database to identify logins from VPNs and proxies, enhancing your defense against masked IP addresses and location spoofing.
 - **Session-Specific Analysis**: Each login session is treated uniquely, ensuring precise and context-aware security checks.
 - **Configurable and Extendable**: Tailor the gem's behavior to your application's specific needs with customizable settings and thresholds.
@@ -34,6 +36,7 @@ UsualSuspect.configure do |config|
   config.vpn_api_key = 'YOUR_API_KEY'
 end
 ```
+The free tier on [vpnapi.io](https://vpnapi.io/api-documentation) allows for 1k requests per day, you'll need to upgrade tier if you want more, if you want to make this gem to be available to use in more services feel free to open a pull request or an issue and I'll add support for more services!
 
 ## Usage
 
@@ -56,37 +59,56 @@ And when your session is created and you have a current_user available then add 
 ```
 track_usual_suspect_login
 ```
+#### Suspicious password change:
 
 To check for suspicious password change after login you can add this in the controller and method where the user password is updated:
 ```	
 current_user.check_for_suspicious_password_change(session[:usual_suspect_session_token])
 ```
+#### Device fingerprinting:
+To add device fingerprinting you will need to send device_info parameters in your login form. you can get device_info this way with javascript, usual_suspect will take care of the rest.
 
-When the user logs in, it will create a new record in the table `UsualSuspectEvent`, and depending on the fields you can decide if you should block that user account, depending on your organization requirements.
-Also when the user changes password it will update the `password_change_after_login` to true if the password change was before 5 minutes of being logged in.
-
-```ruby
-[#<UsualSuspectEvent:0x00007fcdd8319680
-  id: 1,
-  user_id: 2,
-  last_sign_in_at: nil,
-  sign_in_at: Thu, 11 Jan 2024 00:56:59.231569000 UTC +00:00,
-  password_change_after_login: nil,
-  geovelocity_failed: true,
-  using_vpn: true,
-  using_proxy: false,
-  using_tor: false,
-  sign_in_ip: "192.145.39.9",
-  city: "Madrid",
-  country: "ES",
-  latitude: "40.4165",
-  longitude: "-3.7026",
-  session_token: "[FILTERED]",
-  created_at: Thu, 11 Jan 2024 00:56:59.232648000 UTC +00:00,
-  updated_at: Thu, 11 Jan 2024 00:56:59.232648000 UTC +00:00>]
+```javascript
+var deviceInfo = {
+    language: navigator.language,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    screen_width: screen.width,
+    screen_height: screen.height,
+    colorDepth: screen.colorDepth,
+    sessionStorage: !!window.sessionStorage,
+    localStorage: !!window.localStorage,
+    cookiesEnabled: navigator.cookieEnabled,
+    deviceMemory: navigator.deviceMemory || 'unknown',
+    hardwareConcurrency: navigator.hardwareConcurrency,
+};
 ```
 
-The free tier on [vpnapi.io](https://vpnapi.io/api-documentation) allows for 1k requests per day, you'll need to upgrade tier if you want more, if you want to make this gem to be available to use in more services feel free to open a pull request and I'll add it!
+When the user logs in, it will create a new record in the table `UsualSuspectEvent`, and depending on the fields you can decide if you should block that user account.
+Also when the user changes password it will update the `password_change_after_login` to true if the password change was before 5 minutes of being logged in.
+
+UsualSuspectEvent Table:
+```ruby
+#<UsualSuspectEvent:0x00007fdef36c3c00
+ id: 18,
+ user_id: 2,
+ last_sign_in_at: nil,
+ sign_in_at: Thu, 25 Jan 2024 01:42:13.557680000 UTC +00:00,
+ password_change_after_login: true,
+ geovelocity_failed: true,
+ using_vpn: true,
+ using_proxy: false,
+ using_tor: false,
+ new_device: false,
+ sign_in_ip: "xxx.xxx.xxx.xx",
+ city: "Madrid",
+ country: "ES",
+ latitude: "xx.xxxx",
+ longitude: "-xxx.xxxx",
+ session_token: "[FILTERED]",
+ device_fingerprint: "c18ab96a22bece029c71a7229b48234786b3055880eeda6091942ef5cd136",
+ created_at: Thu, 25 Jan 2024 01:42:13.562592000 UTC +00:00,
+ updated_at: Thu, 25 Jan 2024 01:42:13.562592000 UTC +00:00>
+```
 
 ## Contributing
 
