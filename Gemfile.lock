@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    usual_suspect (0.1.0)
+    usual_suspect (1.0.0)
       geocoder (~> 1.8.2)
 
 GEM
